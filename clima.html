@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta de Clima</title>
+</head>
+<body>
+
+<h2>Consulta de Clima</h2>
+
+<label for="city">Ciudad:</label>
+<input type="text" id="city" name="city">
+<button onclick="getWeather()">Obtener Clima</button>
+
+<div id="weather-info"></div>
+
+<script>
+function getWeather() {
+  var city = document.getElementById("city").value;
+  var apiKey = 'b890b7b14ed9ba01ce8d63a5fc7a852c'; // Inserta aquí tu API key de OpenWeatherMap
+  var url = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.weather && data.weather.length > 0) {
+        var weatherInfo = `Clima en ${data.name}: ${data.weather[0].description}<br>
+                           Temperatura: ${Math.round(data.main.temp - 273.15)}°C<br>
+                           Humedad: ${data.main.humidity}%`;
+        document.getElementById("weather-info").innerHTML = weatherInfo;
+      } else {
+        document.getElementById("weather-info").innerHTML = "No se pudo obtener información de clima para la ciudad especificada.";
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener el clima:', error);
+      document.getElementById("weather-info").innerHTML = "Error al obtener el clima. Por favor, verifica que la ciudad sea válida.";
+    });
+}
+</script>
+
+</body>
+</html>
